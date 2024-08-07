@@ -13,6 +13,7 @@ class CherrioController {
 
   @Value("server.name") serverName: string;
   @Value("config.HY_FILE") HY_FILE: string;
+  @Value("config.TRADE_TOTAL") TRADE_TOTAL: string;
   constructor(ctx: Express) {
     this.ctx = ctx;
   }
@@ -27,6 +28,12 @@ class CherrioController {
   @Get("/getBKHQ")
   async GetBKHQ(req: Request, res: Response) {
     const data = await this.CherrioService.GetBKHQ(this.HY_FILE);
+    res.json(Resp.Ok(data));
+  }
+
+  @Get("/tradeTotal")
+  async tradeTotal(req: Request, res: Response) {
+    const data = await this.CherrioService.tradeTotal(this.TRADE_TOTAL);
     res.json(Resp.Ok(data));
   }
 }

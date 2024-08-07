@@ -1,6 +1,6 @@
 import { Autowired, Component, Value } from "sgridnode/build/main";
 import loggerComponent from "./logger.component";
-import { getBKHQ, replaceTarget } from "./index.util";
+import { getBKHQ, getTradeTotal, replaceTarget } from "./index.util";
 import axios from "axios";
 import _ from "lodash";
 
@@ -22,5 +22,9 @@ export class CherrioService {
 
   GetBKHQ(TARGET: string) {
     return getBKHQ(TARGET);
+  }
+
+  tradeTotal(TARGET: string) {
+    return getTradeTotal(TARGET);
   }
 }

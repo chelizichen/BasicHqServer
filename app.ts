@@ -2,7 +2,8 @@ import { NewSgridServer, NewSgridServerCtx } from "sgridnode/build/main";
 import { CherrioController } from "./src/index.controller";
 import express from "express";
 import path from "path";
-import { getBKHQ, getConf } from "./src/index.util";
+import { getBKHQ, getConf, getTradeTotal } from "./src/index.util";
+import _ from "lodash";
 function boost() {
   const ctx = NewSgridServerCtx();
   const f = new CherrioController(ctx);
@@ -15,8 +16,22 @@ function boost() {
     console.log("data", data);
     res.render("index", {
       title: "板块涨幅",
+      legend: "百分比(%)",
       xData: JSON.stringify(data.map((v) => v.name)),
       yData: JSON.stringify(data.map((v) => v.value)),
+    });
+  });
+
+  ctx.get("/web/trade_money", async (req, res) => {
+    const data = await getTradeTotal(getConf("config.TRADE_TOTAL"));
+    console.log("data", data);
+    res.render("index", {
+      title: "资金流向统计",
+      legend: "资金统计(亿元)",
+      xData: JSON.stringify(_.keys(data)),
+      yData: JSON.stringify(
+        _.values(data).map((v) => (v / 100000000).toFixed(0))
+      ),
     });
   });
 
