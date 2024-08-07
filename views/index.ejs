@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts 示例</title>
+    <!-- 引入 ECharts 的库文件 -->
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <nav>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#" class="nav-link active">板块涨幅</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">关于</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="chart" style="width: 100vw;height:600px;"></div>
+
+    <!-- 添加一个 div 作为图表的容器 -->
+    <!-- 引入 JavaScript 文件 -->
+    <script defer>
+        // 初始化图表实例
+        var myChart = echarts.init(document.getElementById("chart"));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '<%= title %>',
+            },
+            tooltip: {},
+            legend: {
+                data: ["百分比(%)"],
+            },
+            xAxis: {
+                data: JSON.parse('<%- xData %>'),
+                axisLabel: {
+                    color: '#333',
+                    //  让x轴文字方向为竖向
+                    interval: 0,
+                    formatter: function (value) {
+                        return value.split('').join('\n')
+                    }
+                },
+                type: 'category',
+                axisLine: {
+                    show: false // 隐藏 X 轴轴线
+                },
+                axisTick: {
+                    show: false // 隐藏 X 轴刻度线
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: "rgba(77, 128, 254, 0.2)",
+                        width: 2
+                    }
+                }
+            },
+            yAxis: {},
+            series: [
+                {
+                    name: "百分比(%)",
+                    type: "bar",
+                    data: JSON.parse('<%- yData %>'),
+                },
+            ],
+        };
+        console.log(option.xAxis)
+        console.log(option.series)
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>
