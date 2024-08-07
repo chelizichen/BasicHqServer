@@ -51,3 +51,80 @@ main {
 nav {
   width: 100%;
 }
+
+/*底部*/
+footer {
+  overflow: hidden;
+  min-width: var(--mainWidth);
+  height: 352px;
+  background: #2b2b2b;
+  color: #ffffff;
+  text-align: left;
+  font-size: 13px;
+}
+
+footer a {
+  color: #ffffff;
+}
+
+footer .footer-container,
+footer .copyright {
+  margin: 0 auto;
+  width: 1200px;
+}
+
+footer .footer-container {
+  display: flex;
+  flex-direction: row;
+  padding: 100px 0 80px;
+  height: 300px;
+  box-sizing: border-box;
+}
+
+footer .footer-container h2 {
+  font-size: 48px;
+}
+
+.footer-container ul {
+  margin-left: 100px;
+}
+
+.footer-container ul li {
+  margin-bottom: 15px;
+}
+
+.footer-container ul li:first-child,
+.footer-container ul li:nth-child(2) {
+  font-size: 15px;
+}
+
+.footer-container ul li:first-child {
+  margin-bottom: 13px;
+}
+
+.footer-container ul li:nth-child(2) {
+  margin-bottom: 30px;
+  text-indent: 15px;
+}
+
+.footer-container ul:nth-child(3) {
+  width: 140px;
+}
+
+.footer-container ul:nth-child(3) li {
+  width: 66px;
+}
+
+.footer-container ul:nth-child(3) li:nth-child(3),
+.footer-container ul:nth-child(3) li:nth-child(4),
+.footer-container ul:nth-child(3) li:nth-child(5),
+.footer-container ul:nth-child(3) li:nth-child(6),
+.footer-container ul:nth-child(3) li:nth-child(7) {
+  display: inline-block;
+}
+
+footer .copyright {
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+}
