@@ -17,6 +17,7 @@ function boost() {
     res.render("index", {
       title: "板块涨幅",
       legend: "百分比(%)",
+      publicPath: getConf("config.publicPath"),
       xData: JSON.stringify(data.map((v) => v.name)),
       yData: JSON.stringify(data.map((v) => v.value)),
     });
@@ -28,6 +29,7 @@ function boost() {
     res.render("index", {
       title: "资金流向统计",
       legend: "资金统计(亿元)",
+      publicPath: getConf("config.publicPath"),
       xData: JSON.stringify(_.keys(data)),
       yData: JSON.stringify(
         _.values(data).map((v) => (v / 100000000).toFixed(0))
@@ -41,6 +43,7 @@ function boost() {
     res.render("index", {
       title: "板块主力占比涨幅",
       legend: "5日净流入百分比(%)",
+      publicPath: getConf("config.publicPath"),
       xData: JSON.stringify(data.map((v) => v.name)),
       yData: JSON.stringify(data.map((v) => v.value.toFixed(2))),
     });

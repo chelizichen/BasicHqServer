@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>大癌行情助手 祝你的心情像大癌一样四季如春</title>
     <!-- 引入 ECharts 的库文件 -->
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="<%- publicPath %>static/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
 </head>
 
@@ -14,11 +14,11 @@
         <nav>
             <ul class="nav-list">
                 <li class="nav-item" style="margin-right:100px">
-                    <img src="/static/avatar.png" style="border-radius:50%;height:70%;width:70%;">
+                    <img src="<%- publicPath %>static/avatar.png" style="border-radius:50%;height:70%;width:70%;">
                 </li>
-                <li class="nav-item"><a href="/web/bk" class="nav-link">板块涨幅</a></li>
-                <li class="nav-item"><a href="/web/bk_main" class="nav-link">主力方向</a></li>
-                <li class="nav-item"><a href="/web/trade_money" class="nav-link">资金流向</a></li>
+                <li class="nav-item"><a href="<%- publicPath %>web/bk" class="nav-link">板块涨幅</a></li>
+                <li class="nav-item"><a href="<%- publicPath %>web/bk_main" class="nav-link">主力方向</a></li>
+                <li class="nav-item"><a href="<%- publicPath %>web/trade_money" class="nav-link">资金流向</a></li>
                 <li class="nav-item"><a href="#footer" class="nav-link">关于</a>
                 </li>
             </ul>
