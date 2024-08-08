@@ -2,7 +2,7 @@ import { NewSgridServer, NewSgridServerCtx } from "sgridnode/build/main";
 import { CherrioController } from "./src/index.controller";
 import express from "express";
 import path from "path";
-import { getBKHQ, getConf, getTradeTotal } from "./src/index.util";
+import { getBKHQ, getBkMain, getConf, getTradeTotal } from "./src/index.util";
 import _ from "lodash";
 function boost() {
   const ctx = NewSgridServerCtx();
@@ -32,6 +32,17 @@ function boost() {
       yData: JSON.stringify(
         _.values(data).map((v) => (v / 100000000).toFixed(0))
       ),
+    });
+  });
+
+  ctx.get("/web/bk_main", async (req, res) => {
+    const data = await getBkMain(getConf("config.HY_MAIN"));
+    console.log("data", data);
+    res.render("index", {
+      title: "板块主力占比涨幅",
+      legend: "5日净流入百分比(%)",
+      xData: JSON.stringify(data.map((v) => v.name)),
+      yData: JSON.stringify(data.map((v) => v.value.toFixed(2))),
     });
   });
 

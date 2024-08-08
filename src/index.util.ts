@@ -37,6 +37,29 @@ export function getBKHQ(TARGET: string) {
   });
 }
 
+export function getBkMain(TARGET: string) {
+  return new Promise((resolve) => {
+    const T = replaceTarget(TARGET);
+    axios.get(T.URL).then((res) => {
+      const data = res.data;
+      const ret = eval(data.replace(T.NAME, ""));
+      const diff = _.get(ret, "data.diff", []) || [];
+      const charts = _.map(diff, (item) => {
+        const [bkmc, a1, a2, a3] = [item.f14, item.f165, item.f167, item.f169];
+        const v = a1 + a2 + a3;
+        console.log("bkmc", bkmc, v, "|", a1, a2, a3);
+
+        return {
+          name: bkmc,
+          value: v,
+        };
+      });
+      const sortChartsData = _.orderBy(charts, "value", "desc");
+      resolve(sortChartsData);
+    });
+  });
+}
+
 export function getTradeTotal(TARGET: string) {
   function getTradeVal(data) {
     return [
