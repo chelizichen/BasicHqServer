@@ -21,7 +21,7 @@
             </ul>
         </nav>
     </header>
-    <div id="chart" style="width: 100vw;height:600px;"></div>
+    <div id="chart" style="width: 100vw;height:70vh;padding:40px"></div>
 
     <footer>
         <div class="footer-container">
@@ -96,6 +96,10 @@
                     name: '<%- legend %>',
                     type: "bar",
                     data: JSON.parse('<%- yData %>'),
+                    label: {
+                        show: true,
+                        position: 'top'
+                    },
                 },
             ],
         };
