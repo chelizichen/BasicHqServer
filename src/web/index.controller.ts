@@ -1,7 +1,8 @@
 import { Controller, Get, Autowired, Value, Resp } from "sgridnode/build/main";
 import { Request, Response, Express, Router } from "express";
+import loggerComponent from "../component/logger";
 import { CherrioService } from "./index.service";
-import loggerComponent from "./logger.component";
+import ValueComponent from "../component/value";
 
 @Controller("/cherrio")
 class CherrioController {
@@ -9,11 +10,9 @@ class CherrioController {
   public router: Router | undefined;
 
   @Autowired(loggerComponent) logger: loggerComponent;
-  @Autowired(CherrioService) CherrioService: CherrioService;
+  @Autowired(CherrioService) service: CherrioService;
+  @Autowired(ValueComponent) value: ValueComponent;
 
-  @Value("server.name") serverName: string;
-  @Value("config.HY_FILE") HY_FILE: string;
-  @Value("config.TRADE_TOTAL") TRADE_TOTAL: string;
   constructor(ctx: Express) {
     this.ctx = ctx;
   }
@@ -21,19 +20,19 @@ class CherrioController {
   @Get("/hello")
   async hello(req: Request, res: Response) {
     res.json(
-      Resp.Ok(this.serverName + " :: hello ::" + this.CherrioService.greet())
+      Resp.Ok(this.value.serverName + " :: hello ::" + this.service.greet())
     );
   }
 
   @Get("/getBKHQ")
   async GetBKHQ(req: Request, res: Response) {
-    const data = await this.CherrioService.GetBKHQ(this.HY_FILE);
+    const data = await this.service.GetBKHQ(this.value.HY_FILE);
     res.json(Resp.Ok(data));
   }
 
   @Get("/tradeTotal")
   async tradeTotal(req: Request, res: Response) {
-    const data = await this.CherrioService.tradeTotal(this.TRADE_TOTAL);
+    const data = await this.service.tradeTotal(this.value.TRADE_TOTAL);
     res.json(Resp.Ok(data));
   }
 }

@@ -1,10 +1,9 @@
 import { NewSgridServer, NewSgridServerCtx } from "sgridnode/build/main";
-import { CherrioController } from "./src/index.controller";
+import { CherrioController } from "./src/web/index.controller";
 import express from "express";
 import path from "path";
-import { getBKHQ, getBkMain, getConf, getTradeTotal } from "./src/index.util";
 import _ from "lodash";
-import { WebController } from "./src/web.controller";
+import { WebController } from "./src/web/web.controller";
 function boost() {
   const ctx = NewSgridServerCtx();
   const f = new CherrioController(ctx);

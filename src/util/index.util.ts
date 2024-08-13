@@ -1,5 +1,6 @@
 import axios from "axios";
 import _ from "lodash";
+
 export function generateRandomCallbackName() {
   const randomPart = Math.floor(Math.random() * 10000000000000000).toString(); // 生成一个 16 位的随机数
   const timestamp = Date.now(); // 获取当前时间戳
@@ -61,6 +62,8 @@ export function getBkMain(TARGET: string) {
 }
 
 export function getTradeTotal(TARGET: string) {
+  console.log("target", TARGET);
+
   function getTradeVal(data) {
     return [
       { value: data["f65"], name: "超大单流出" },
