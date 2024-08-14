@@ -1,4 +1,5 @@
 import { CronJob } from "cron";
+import { Router, Express } from "express";
 
 let InitMethods = {};
 const Cron = (time: string, init: boolean = false) => {
@@ -30,4 +31,13 @@ const Schedule = (value: any, context: ClassDecoratorContext) => {
   });
 };
 
-export { Cron, Schedule };
+class SgridNodeBaseController {
+  public ctx: Express;
+  public router: Router;
+
+  constructor(ctx: Express) {
+    this.ctx = ctx;
+  }
+}
+
+export { Cron, Schedule, SgridNodeBaseController };

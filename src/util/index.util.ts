@@ -67,13 +67,13 @@ export function getTradeTotal(TARGET: string) {
   function getTradeVal(data) {
     return [
       { value: data["f65"], name: "超大单流出" },
+      { value: data["f64"], name: "超大单流入" },
       { value: data["f71"], name: "大单流出" },
+      { value: data["f70"], name: "大单流入" },
       { value: data["f77"], name: "中单流出" },
+      { value: data["f76"], name: "中单流入" },
       { value: data["f83"], name: "小单流出" },
       { value: data["f82"], name: "小单流入" },
-      { value: data["f76"], name: "中单流入" },
-      { value: data["f70"], name: "大单流入" },
-      { value: data["f64"], name: "超大单流入" },
     ];
   }
   return new Promise((resolve) => {
@@ -95,17 +95,17 @@ export function getTradeTotal(TARGET: string) {
           }
           return pre;
         }, {});
-      const inKeys = ["小单流入", "中单流入", "大单流入", "超大单流入"];
-      const TOTAL = {
-        value: 0,
-        name: "两市总成交额",
-      };
-      for (let key in resp) {
-        if (inKeys.includes(key)) {
-          TOTAL.value = resp[key] + TOTAL.value;
-        }
-      }
-      resp[TOTAL.name] = TOTAL.value;
+      // const inKeys = ["小单流入", "中单流入", "大单流入", "超大单流入"];
+      // const TOTAL = {
+      //   value: 0,
+      //   name: "两市总成交额",
+      // };
+      // for (let key in resp) {
+      //   if (inKeys.includes(key)) {
+      //     TOTAL.value = resp[key] + TOTAL.value;
+      //   }
+      // }
+      // resp[TOTAL.name] = TOTAL.value;
       resolve(resp);
     });
   });

@@ -1,9 +1,8 @@
-import { Controller, Get, Autowired, Value, Resp } from "sgridnode/build/main";
+import { Controller, Get, Autowired, Resp } from "sgridnode/build/main";
 import { Request, Response, Express, Router } from "express";
 import loggerComponent from "../component/logger";
 import { CherrioService } from "./index.service";
 import ValueComponent from "../component/value";
-
 @Controller("/cherrio")
 class CherrioController {
   public ctx: Express;

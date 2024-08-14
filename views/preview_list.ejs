@@ -1,0 +1,21 @@
+<%- include('head', {publicPath: publicPath}); %>
+
+
+    <body>
+        <%- include('header', {publicPath: publicPath}); %>
+
+            <h1>Images List</h1>
+            <ul style="height:80vh">
+                <% images.forEach(function(image) { %>
+                    <li>
+                        <a href="<%- publicPath %>preview/<%= image %>"><img src="<%- publicPath %>preview/<%= image %>"
+                                alt="<%= image %>" style="height:50px;width:50px;border-radius:50%">
+                            <%= image %>
+                        </a>
+                    </li>
+                    <% }) %>
+            </ul>
+            <%- include('footer', {publicPath: publicPath}); %>
+    </body>
+
+    </html>

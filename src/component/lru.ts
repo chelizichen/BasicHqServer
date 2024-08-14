@@ -17,7 +17,7 @@ class LruComponent {
     return "LRU|BK|MAIN";
   }
   getTradeMoneyKey() {
-    return "LRU|BK|MAIN";
+    return "LRU|TRADE|MONEY";
   }
 
   getBk() {
