@@ -2,7 +2,10 @@
 
     <body>
         <%- include('header', {publicPath: publicPath}); %>
-            <div id="chart" style="width: 100vw;height:80vh;padding:40px"></div>
+            <div style="width: 60vw;height:80vh;padding:10vh 20vw 0 20vw">
+                <div id="chart" style="width: 100%;height:60%;"></div>
+            </div>
+
 
             <%- include('footer', {publicPath: publicPath}); %>
 
@@ -48,9 +51,9 @@
                             axisLabel: {
                                 color: '#333',
                                 //  让x轴文字方向为竖向
-                                interval: 0,
+                                rotate: 65,
                                 textStyle: {
-                                    fontSize: 16, // 文字大小
+                                    fontSize: 14, // 文字大小
                                     fontWeight: 'bold' // 文字粗细
                                 },
                             },

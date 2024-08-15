@@ -14,7 +14,7 @@ type UnderlineCase<Str extends string> =
     : Str
 
 interface trade_money_total {
-  date: string
+  date: number
   total: number
   id: number
 }

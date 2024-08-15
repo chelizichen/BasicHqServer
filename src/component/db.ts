@@ -4,11 +4,13 @@ import { getConf } from "../util/index.util"
 import LruComponent from "./lru"
 import moment from "moment"
 import _ from "lodash"
+import loggerComponent from "./logger"
 
 @Component()
 export class ConnComponent {
   private conn: Knex
   @Autowired(LruComponent) cache: LruComponent
+  @Autowired(loggerComponent) logger: loggerComponent
   constructor() {
     const storageConf = getConf("config.db")
     console.log("storageConf", storageConf)
@@ -26,7 +28,25 @@ export class ConnComponent {
   }
 
   saveTradeTotalTdy(data: Omit<trade_money_total, "id">) {
-    this.conn.insert(data).into("trade_money_total")
+    this.conn
+      .insert(data)
+      .into("trade_money_total")
+      .then((res) => {
+        this.logger.data("saveTradeTotalTdy success", res)
+      })
+      .catch((err: Error) => {
+        this.logger.error("saveTradeTotalTdy error", err.message)
+      })
+  }
+
+  syncDeleteSameData() {
+    const sql = `
+    DELETE t1 FROM trade_money_total t1
+        INNER JOIN
+    trade_money_total t2 
+WHERE
+    t1.id < t2.id AND t1.date = t2.date AND t1.total = t2.total; `
+    this.conn.raw(sql)
   }
 
   async getRecentlyTradeTotalList() {
@@ -41,17 +61,17 @@ export class ConnComponent {
 
     console.log("tradeList", tradeList)
 
-    let resp = _.unionBy(dbRsu2Vo<trade_money_total[]>(tradeList), "name").map(
-      (v) => {
+    let resp = dbRsu2Vo<trade_money_total[]>(tradeList)
+      .map((v) => {
         return {
           name: Number(v.date),
           value: v.total
         }
-      }
-    )
+      })
+      .filter((v) => v.value)
     resp.push(tdy)
 
-    resp = _.orderBy(resp, ["name"], ["asc"])
+    resp = _.unionBy(_.orderBy(resp, ["name"], ["asc"]), "name")
     return resp
   }
 }

@@ -133,7 +133,7 @@ export default class WebService {
       xData: JSON.stringify(data.map((v) => v.name)),
       yData: JSON.stringify(
         data.map((v) => {
-          return v.value.toFixed(2)
+          return Number(v.value).toFixed(0)
         })
       )
     }

@@ -12,6 +12,7 @@ config:
   HEAD_TITLE: 基础行情数据中心
   schedule:
     dailyTradeTotal: "0 30 15 * * *"
+    syncDeleteSameData: "0 16 0 * * *"
   db:
     username: root
     password: 123456

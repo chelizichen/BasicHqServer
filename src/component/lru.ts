@@ -10,61 +10,44 @@ class LruComponent {
     })
   }
 
-  private getBkKey() {
-    return "LRU|BK"
-  }
-  private getBkMainKey() {
-    return "LRU|BK|MAIN"
-  }
-  private getTradeMoneyKey() {
-    return "LRU|TRADE|MONEY"
-  }
-
-  private getCurrTradeTotalKey() {
-    return "LRU|TRADE|CURR"
-  }
-
   getCurrTradeTotal() {
-    return this.rds.get(this.getCurrTradeTotalKey())
+    return this.rds.get("LRU|TRADE|CURR")
   }
 
   getBk() {
-    return this.rds.get(this.getBkKey())
+    return this.rds.get("LRU|BK")
   }
 
   getBkMain() {
-    return this.rds.get(this.getBkMainKey())
+    return this.rds.get("LRU|BK|MAIN")
   }
 
   getTradeMoney() {
-    return this.rds.get(this.getTradeMoneyKey())
+    return this.rds.get("LRU|TRADE|MONEY")
   }
   setBk(v) {
-    if (this.rds.get(this.getBkKey())) {
+    if (this.rds.get("LRU|BK")) {
       return true
     }
-    this.rds.set(this.getBkKey(), v, { ttl: 1000 * 60 })
+    this.rds.set("LRU|BK", v, { ttl: 1000 * 60 })
   }
 
   setBkMain(v) {
-    if (this.rds.get(this.getBkMainKey())) {
+    if (this.rds.get("LRU|BK|MAIN")) {
       return true
     }
-    this.rds.set(this.getBkMainKey(), v, { ttl: 1000 * 60 * 5 })
+    this.rds.set("LRU|BK|MAIN", v, { ttl: 1000 * 60 * 5 })
   }
 
   setTradeMonety(v) {
-    if (this.rds.get(this.getTradeMoneyKey())) {
+    if (this.rds.get("LRU|TRADE|MONEY")) {
       return true
     }
-    this.rds.set(this.getTradeMoneyKey(), v, { ttl: 1000 * 30 })
+    this.rds.set("LRU|TRADE|MONEY", v, { ttl: 1000 * 30 })
   }
 
   setCurrTradeTotal(v) {
-    if (this.rds.get(this.getCurrTradeTotalKey())) {
-      return true
-    }
-    this.rds.set(this.getCurrTradeTotalKey(), v)
+    this.rds.set("LRU|TRADE|CURR", v)
   }
 }
 
