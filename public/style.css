@@ -147,3 +147,53 @@ footer .copyright {
   border-radius: 50%;
   background-color: #333;
 }
+
+.chelizichen {
+  line-height: 16px;
+  margin-left: 20px;
+  font-family: monospace;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.chelizichen:hover {
+  color: #5470c6;
+}
+
+.chelizichen-png {
+  border-radius: 50%;
+  height: 30%;
+  width: 30%;
+  cursor: pointer;
+}
+
+.saveToPng {
+  cursor: pointer;
+  color: gainsboro;
+}
+
+.saveToPng:hover {
+  color: #5470c6;
+  transition: all 0.5s;
+}
+
+.history-png-a {
+  text-decoration: none;
+  display: block;
+  font-size: 24px;
+  color: black;
+}
+
+.history-png {
+  height: 50px;
+  width: 50px;
+  margin-right: 12px;
+  box-shadow: 3px 5px 10px darkgray;
+}
+
+.history-png-li {
+  list-style: decimal-leading-zero;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+}

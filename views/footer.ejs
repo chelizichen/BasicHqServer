@@ -1,6 +1,6 @@
 <footer id="footer">
     <div class="footer-container">
-        <h2>SgridCloud</h2>
+        <h2 id="sgrid-cloud" style="height: 100px;width:300px"></h2>
         <ul>
             <li>Cooperation</li>
             <li>商务合作</li>
@@ -25,3 +25,49 @@
         <p>SgridCoud Servers BasicHqServer. Copytight@2022.leemulus21@gmail.com Inc.保留所有权利</p>
     </div>
 </footer>
+
+<script defer>
+    const SgridCloudTextChart = {
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: 'center',
+                    top: 'center',
+                    style: {
+                        text: 'SgridCloud',
+                        fontSize: 46,
+                        fontWeight: 'bold',
+                        lineDash: [0, 200],
+                        lineDashOffset: 0,
+                        fill: 'transparent',
+                        stroke: 'white',
+                        lineWidth: 2
+                    },
+                    keyframeAnimation: {
+                        duration: 5000,
+                        loop: true,
+                        keyframes: [
+                            {
+                                percent: 0.7,
+                                style: {
+                                    fill: 'transparent',
+                                    lineDashOffset: 200,
+                                    lineDash: [200, 0]
+                                }
+                            },
+                            {
+                                percent: 5,
+                                style: {
+                                    fill: 'white'
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    };
+    var sgridCloudChart = echarts.init(document.getElementById("sgrid-cloud"));
+    sgridCloudChart.setOption(SgridCloudTextChart);
+</script>
