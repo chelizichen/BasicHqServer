@@ -1,25 +1,24 @@
-import { Autowired, Component, Value } from "sgridnode/build/main";
-import { ScheduleServer } from "../schedule";
+import { Component, Value } from "sgridnode/build/main"
 
 @Component()
 class ValueComponent {
   @Value("server.name")
-  serverName: string;
+  serverName: string
 
   @Value("config.HY_FILE")
-  HY_FILE: string;
+  HY_FILE: string
 
   @Value("config.TRADE_TOTAL")
-  TRADE_TOTAL: string;
+  TRADE_TOTAL: string
 
   @Value("config.HY_MAIN")
-  HY_MAIN: string;
+  HY_MAIN: string
 
   @Value("config.publicPath", "/")
-  publicPath: string;
+  publicPath: string
 
-  @Autowired(ScheduleServer)
-  schedule: ScheduleServer;
+  @Value("config.HEAD_TITLE", "")
+  HEAD_TITLE: string
 }
 
-export default ValueComponent;
+export default ValueComponent

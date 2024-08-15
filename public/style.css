@@ -128,3 +128,22 @@ footer .copyright {
   line-height: 45px;
   text-align: center;
 }
+
+.tradeMoney {
+  position: fixed;
+  top: 10vh;
+  right: 10vw;
+  color: #5470c6;
+  font-size: 14px;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.tradeMoney::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #333;
+}

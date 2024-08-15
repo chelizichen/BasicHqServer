@@ -11,3 +11,5 @@ test
 *.tar.gz
 
 uploads
+
+sgridProd.yml
