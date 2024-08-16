@@ -15,7 +15,10 @@
             </li>
             <li class="nav-item"><a href="#footer" class="nav-link">关于</a>
             </li>
-            <li class="nav-item" style="position: absolute;right:0"><a onclick="convert()" class="saveToPng">保存</a>
+            <li class="nav-item" style="position: absolute;right:0">
+                <input type="text" id="saveToPngInput" placeholder="输入文件名称"
+                    style="width: 100px;height: 30px;margin-right: 10px;">
+                <a onclick="publicFunction.convert()" class="saveToPng">保存</a>
             </li>
 
         </ul>

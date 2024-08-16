@@ -12,27 +12,6 @@
                 <!-- 添加一个 div 作为图表的容器 -->
                 <!-- 引入 JavaScript 文件 -->
                 <script defer>
-                    function convert() {
-                        html2canvas(document.body).then(canvas => {
-                            canvas.toBlob(blob => {
-                                const formData = new FormData();
-                                formData.append('image', blob, 'screenshot.png');
-                                const Target = '<%- publicPath %>' + 'web/uploadPng';
-                                fetch(Target, {
-                                    method: 'POST',
-                                    body: formData,
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        console.log('Image uploaded successfully:', data);
-                                    })
-                                    .catch(error => {
-                                        console.error('Error uploading image:', error);
-                                    });
-                            }, 'image/png');
-                        });
-                    }
-
                     // 初始化图表实例
                     var myChart = echarts.init(document.getElementById("chart"));
                     // 指定图表的配置项和数据

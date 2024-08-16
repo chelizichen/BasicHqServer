@@ -8,10 +8,33 @@
     <link rel="stylesheet" href="<%- publicPath %>static/style.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
+    <script defer>
         var publicFunction = {}
         publicFunction.toGit = function () {
             window.open("https://github.com/chelizichen")
         }
+
+        publicFunction.convert = function () {
+            html2canvas(document.body).then(canvas => {
+                canvas.toBlob(blob => {
+                    const formData = new FormData();
+                    const inputName = document.getElementById("saveToPngInput").value || "screenShot";
+                    formData.append('image', blob);
+                    const Target = '<%- publicPath %>' + 'web/uploadPng' + '?name=' + inputName;
+                    fetch(Target, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Image uploaded successfully:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error uploading image:', error);
+                        });
+                }, 'image/png');
+            });
+        }
+
     </script>
 </head>
