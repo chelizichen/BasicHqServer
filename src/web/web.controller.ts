@@ -32,6 +32,14 @@ class WebController extends SgridNodeBaseController {
     res.render("trade_money", render_data)
   }
 
+  @Get("/kline")
+  async kline(req: Request, res: Response) {
+    const render_data = await this.service.getKlineByCode(req.query.code!)
+    const choose_data = await this.service.getChooseData()
+    render_data.chooseData = choose_data
+    res.render("kline", render_data)
+  }
+
   @Get("/trade_his")
   async trade_his(req: Request, res: Response) {
     const render_data = await this.service.getTradeHis()

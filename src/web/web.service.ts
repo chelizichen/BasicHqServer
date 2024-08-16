@@ -1,7 +1,12 @@
 import { Autowired, Component } from "sgridnode/build/main"
 import ValueComponent from "../component/value"
 import LruComponent from "../component/lru"
-import { getBKHQ, getBkMain, getTradeTotal } from "../util/index.util"
+import {
+  getBKHQ,
+  getBkMain,
+  getTradeTotal,
+  getKlineByCode
+} from "../util/index.util"
 import _ from "lodash"
 import { ConnComponent } from "../component/db"
 
@@ -143,5 +148,23 @@ export default class WebService {
       )
     }
     return render_data
+  }
+
+  async getKlineByCode(code: string = "600733") {
+    const kLineData = await getKlineByCode(code)
+    const render_data = {
+      HEAD_TITLE: this.value.HEAD_TITLE,
+      title: "历史成交",
+      legend: "成交总额(亿)",
+      publicPath: this.value.publicPath,
+      data: JSON.stringify(kLineData.data),
+      name: kLineData.name,
+      chooseData: []
+    }
+    return render_data
+  }
+
+  async getChooseData() {
+    return this.db.getChooseData()
   }
 }

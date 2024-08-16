@@ -23,3 +23,10 @@ interface ChartData {
   name: string
   value: number
 }
+
+interface ChooseData {
+  name: string
+  code: string
+  createTime: string
+  id: number
+}

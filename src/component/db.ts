@@ -74,4 +74,13 @@ WHERE
     resp = _.unionBy(_.orderBy(resp, ["name"], ["asc"]), "name")
     return resp
   }
+
+  async getChooseData(): Promise<Array<ChooseData>> {
+    const tradeList = await this.conn
+      .select("*")
+      .from("choose_stock")
+      .orderBy("id", "desc")
+    const resp = dbRsu2Vo<ChooseData[]>(tradeList)
+    return resp
+  }
 }

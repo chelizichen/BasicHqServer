@@ -101,6 +101,37 @@ export function getTradeTotal(TARGET: string) {
   })
 }
 
+function getMarket(stockCode: string): number {
+  if (stockCode.startsWith("11")) {
+    return 1
+  } else if (stockCode.startsWith("12")) {
+    return 0
+  } else {
+    return ["6", "9", "5", "7"].includes(String(stockCode).slice(0, 1)) ? 1 : 0
+  }
+}
+
+export function getKlineByCode(stockCode: string) {
+  return new Promise((resolve) => {
+    const T = replaceTarget(getConf("config.KLINE_DATA"))
+    const market = getMarket(stockCode)
+    const target = T.URL.replace("[MARKET]", market).replace(
+      "[CODE]",
+      stockCode
+    )
+    axios.get(target).then((res) => {
+      const data = res.data
+      const ret = eval(data.replace(T.NAME, ""))
+      let klines = _.get(ret, "data.klines", [])
+      klines = klines.map((v) => v.split(","))
+      resolve({
+        data: klines,
+        name: `${ret.data.name}(${ret.data.code})`
+      })
+    })
+  })
+}
+
 export function getConf(key: string) {
   try {
     return _.get(loadSgridConf(), key, "")
