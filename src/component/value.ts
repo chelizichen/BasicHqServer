@@ -19,6 +19,9 @@ class ValueComponent {
 
   @Value("config.HEAD_TITLE", "")
   HEAD_TITLE: string
+
+  @Value("config.FILTER_BK", "[]")
+  FILTER_BK: string[]
 }
 
 export default ValueComponent

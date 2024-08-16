@@ -18,3 +18,8 @@ interface trade_money_total {
   total: number
   id: number
 }
+
+interface ChartData {
+  name: string
+  value: number
+}

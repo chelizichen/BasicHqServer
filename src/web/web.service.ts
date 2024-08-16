@@ -5,20 +5,20 @@ import { getBKHQ, getBkMain, getTradeTotal } from "../util/index.util"
 import _ from "lodash"
 import { ConnComponent } from "../component/db"
 
-interface ChartData {
-  name: string
-  value: number
-}
-
 @Component()
 export default class WebService {
   @Autowired(ValueComponent) value: ValueComponent
   @Autowired(LruComponent) cache: LruComponent
   @Autowired(ConnComponent) db: ConnComponent
 
+  filterBk: string[]
+  constructor() {
+    console.log("this.value.Filter_BK", this.value.FILTER_BK)
+    this.filterBk = this.value.FILTER_BK
+  }
   async getBkData() {
-    let data = null
-    data = this.cache.getBk()
+    let data = null as ChartData[]
+    data = this.cache.getBk() as ChartData[]
     if (!data) {
       data = (await getBKHQ(this.value.HY_FILE)) as ChartData[]
       this.cache.setBk(data)
@@ -26,7 +26,9 @@ export default class WebService {
     } else {
       console.log("击中缓存")
     }
-
+    data = data.filter((v) => {
+      return !this.filterBk.find((e) => v.name == e)
+    })
     const render_Data = {
       HEAD_TITLE: this.value.HEAD_TITLE,
       title: "板块涨幅",
@@ -61,6 +63,9 @@ export default class WebService {
       console.log("击中缓存 ｜ bk_main")
       console.log("data", data)
     }
+    data = data.filter((v) => {
+      return !this.filterBk.find((e) => v.name == e)
+    })
     const render_data = {
       HEAD_TITLE: this.value.HEAD_TITLE,
       title: "板块主力占比涨幅",
