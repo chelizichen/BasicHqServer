@@ -42,4 +42,12 @@ class SgridNodeBaseController {
   }
 }
 
+export function threadLock(): boolean {
+  if (!process.env.SGRID_PROCESS_INDEX) {
+    // 本地默认为true
+    return true
+  }
+  return process.env.SGRID_PROCESS_INDEX == "0" // 首索引进行线程锁
+}
+
 export { Cron, Schedule, SgridNodeBaseController }

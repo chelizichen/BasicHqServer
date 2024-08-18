@@ -5,6 +5,7 @@ import LruComponent from "./lru"
 import moment from "moment"
 import _ from "lodash"
 import loggerComponent from "./logger"
+import { threadLock } from "../decorator"
 
 @Component()
 export class ConnComponent {
@@ -27,19 +28,35 @@ export class ConnComponent {
     console.log("database  init success")
   }
 
-  saveTradeTotalTdy(data: Omit<trade_money_total, "id">) {
+  syncSaveTradeTotalTdy(data: Omit<trade_money_total, "id">) {
+    const locked = threadLock()
+    if (!locked) {
+      console.log("加锁失败 |" + process.env.SGRID_PROCESS_INDEX)
+      return
+    }
+    console.log("加锁成功 |" + process.env.SGRID_PROCESS_INDEX)
     this.conn
       .insert(data)
       .into("trade_money_total")
       .then((res) => {
-        this.logger.data("saveTradeTotalTdy success", res)
+        this.logger.data("syncSaveTradeTotalTdy success", res)
       })
       .catch((err: Error) => {
-        this.logger.error("saveTradeTotalTdy error", err.message)
+        this.logger.error("syncSaveTradeTotalTdy error", err.message)
       })
   }
 
   syncDeleteSameData() {
+    const locked = threadLock()
+    if (!locked) {
+      console.log(
+        "syncDeleteSameData 加锁失败 |" + process.env.SGRID_PROCESS_INDEX
+      )
+      return
+    }
+    console.log(
+      "syncDeleteSameData 加锁成功 |" + process.env.SGRID_PROCESS_INDEX
+    )
     const sql = `
     DELETE t1 FROM trade_money_total t1
         INNER JOIN

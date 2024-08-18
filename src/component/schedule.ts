@@ -21,14 +21,13 @@ export class ScheduleServer {
       }
     })
     console.log("totalMoney", totalMoney)
-    this.conn.saveTradeTotalTdy({
+    this.conn.syncSaveTradeTotalTdy({
       date: Number(moment().format("YYYYMMDD")),
       total: totalMoney
     })
   }
   @Cron("config.schedule.syncDeleteSameData", true)
   async syncDeleteSameData() {
-    console.log("run : syncDeleteSameData")
-    // this.conn.syncDeleteSameData()
+    this.conn.syncDeleteSameData()
   }
 }
