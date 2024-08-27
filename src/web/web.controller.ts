@@ -1,5 +1,5 @@
 import { Controller, Get, Autowired, Resp, Post } from "sgridnode/build/main"
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { SgridNodeBaseController } from "../decorator"
 import { createFileMiddleware } from "../middleware/file"
 import path from "path"
@@ -8,6 +8,7 @@ import { cwd } from "process"
 import WebService from "./web.service"
 import ValueComponent from "../component/value"
 import loggerComponent from "../component/logger"
+
 @Controller("/web")
 class WebController extends SgridNodeBaseController {
   @Autowired(WebService) service: WebService
@@ -17,18 +18,21 @@ class WebController extends SgridNodeBaseController {
   @Get("/bk")
   async bk(req: Request, res: Response) {
     const render_data = await this.service.getBkData()
+    render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
     res.render("index", render_data)
   }
 
   @Get("/bk_main")
   async bk_main(req: Request, res: Response) {
     const render_data = await this.service.getBkMain()
+    render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
     res.render("index", render_data)
   }
 
   @Get("/trade_money")
   async trade_money(req: Request, res: Response) {
     const render_data = await this.service.getTradeMoney()
+    render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
     res.render("trade_money", render_data)
   }
 
@@ -37,6 +41,7 @@ class WebController extends SgridNodeBaseController {
     const render_data = await this.service.getKlineByCode(req.query.code!)
     const choose_data = await this.service.getChooseData()
     render_data.chooseData = choose_data
+    render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
     res.render("kline", render_data)
   }
 
@@ -44,6 +49,7 @@ class WebController extends SgridNodeBaseController {
   async trade_his(req: Request, res: Response) {
     const render_data = await this.service.getTradeHis()
     this.logger.info("trade_his.render_data", render_data)
+    render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
     res.render("trade_his", render_data)
   }
 
@@ -89,11 +95,13 @@ class WebController extends SgridNodeBaseController {
       const imageFiles = files.filter((file) =>
         /\.(jpg|jpeg|png|gif)$/i.test(file)
       )
-      res.render("preview_list", {
+      const render_data = {
         HEAD_TITLE: this.value.HEAD_TITLE,
         images: imageFiles,
         publicPath: this.value.publicPath
-      }) // 渲染 EJS 视图
+      }
+      render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
+      res.render("preview_list", render_data) // 渲染 EJS 视图
     })
   }
 }
