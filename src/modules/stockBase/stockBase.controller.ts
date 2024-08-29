@@ -1,6 +1,11 @@
 import { Autowired, Controller, Get, Resp } from "sgridnode/build/main"
 import { SgridNodeBaseController } from "../../decorator"
-import { getKlineByCode } from "../../util/index.util"
+import {
+  getKlineByCode,
+  getStockBaseInfo,
+  klineChineseKeys,
+  klineKeys
+} from "../../util/index.util"
 import { NextFunction, Request, Response } from "express"
 import _ from "lodash"
 import loggerComponent from "../../component/logger"
@@ -26,34 +31,6 @@ function FiledLengthInterceptor(filedName: string, errorText: string) {
   }
 }
 
-const klineKeys = [
-  "date",
-  "fOpen",
-  "fClose",
-  "fMax",
-  "fMin",
-  "volume",
-  "turnover",
-  "amplitude",
-  "rate",
-  "diff",
-  "turnOverRate"
-]
-
-const klineChineseKeys = [
-  "日期",
-  "开盘",
-  "收盘",
-  "最高",
-  "最低",
-  "成交量",
-  "成交额",
-  "振幅",
-  "涨跌幅",
-  "涨跌额",
-  "换手率"
-]
-
 @Controller("/stockBaseInfo")
 class StockBaseController extends SgridNodeBaseController {
   @Autowired(loggerComponent)
@@ -69,18 +46,7 @@ class StockBaseController extends SgridNodeBaseController {
   )
   async getStockBaseInfo(req: Request, res: Response) {
     const { code } = req.query
-    const kLineData = await getKlineByCode(code as string)
-    kLineData.data = kLineData.data.map((item) => {
-      const dataset = item
-      const dataObject = {}
-      klineKeys.forEach((key, index) => {
-        dataObject[key] = dataset[index]
-      })
-      return dataObject
-    })
-    const current = kLineData.data[kLineData.data.length - 1]
-    current.code = code
-    current.name = kLineData.name
+    const current = await getStockBaseInfo(code)
     this.logger.info(
       "name %s code %s nowInfo %s",
       current.name,

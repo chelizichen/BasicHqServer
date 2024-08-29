@@ -221,3 +221,31 @@ footer .copyright {
 .stocklist-li:active {
   background-color: #c0c0c0; /* 更改背景颜色 */
 }
+
+/* 表格 */
+
+.plan_box {
+  overflow: hidden;
+}
+.plan_box table {
+  border-spacing: 0;
+}
+.plan_box table thead tr:nth-child(2n + 1) {
+  background-color: #fafafa;
+}
+.plan_box table tr {
+  height: 40px;
+  font-size: 14px;
+  color: #666666;
+  line-height: 14px;
+  font-weight: 400;
+}
+.plan_box table tr:nth-child(2n) {
+  background-color: #fafafa;
+}
+.plan_box table .head {
+  font-size: 14px;
+  color: #666666;
+  line-height: 14px;
+  font-weight: 600;
+}

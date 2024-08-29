@@ -8,6 +8,7 @@ import { cwd } from "process"
 import WebService from "./web.service"
 import ValueComponent from "../component/value"
 import loggerComponent from "../component/logger"
+import { getStockBaseInfo } from "../util/index.util"
 
 @Controller("/web")
 class WebController extends SgridNodeBaseController {
@@ -41,7 +42,14 @@ class WebController extends SgridNodeBaseController {
     const render_data = await this.service.getKlineByCode(req.query.code!)
     const choose_data = await this.service.getChooseData()
     render_data.chooseData = choose_data
+    const current = await getStockBaseInfo(req.query.code)
+    render_data.CURRENT = current
+    console.log("CURRENT", render_data.CURRENT)
     render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
+
+    const tradeRecord = await this.service.getTradeRecord()
+    render_data.TRADERECORD = tradeRecord
+    console.log("TRADERECORD", tradeRecord)
     res.render("kline", render_data)
   }
 

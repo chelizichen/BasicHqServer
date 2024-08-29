@@ -26,8 +26,4 @@ export class ScheduleServer {
       total: totalMoney
     })
   }
-  @Cron("config.schedule.syncDeleteSameData", true)
-  async syncDeleteSameData() {
-    this.conn.syncDeleteSameData()
-  }
 }

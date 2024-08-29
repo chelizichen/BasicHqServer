@@ -30,3 +30,13 @@ interface ChooseData {
   createTime: string
   id: number
 }
+
+interface T_trade {
+  id?: number
+  userId: number
+  code: string
+  type: "1" | "2"
+  createTime: string
+  price: string
+  total: number
+}

@@ -3,11 +3,15 @@ import { SgridNodeBaseController } from "../../decorator"
 import { Request, Response } from "express"
 import moment from "moment"
 import { TradeService } from "./trade.service"
+import loggerComponent from "../../component/logger"
 
-@Controller("/stockBaseInfo")
+@Controller("/tradecontroller")
 class TradeController extends SgridNodeBaseController {
   @Autowired(TradeService)
   private tradeService: TradeService
+
+  @Autowired(loggerComponent)
+  private loggerComponent: loggerComponent
   @Post("/trade")
   async tradeIO(req: Request, res: Response) {
     const { userId, code, price, total, type } = req.body
@@ -20,7 +24,8 @@ class TradeController extends SgridNodeBaseController {
       type,
       total
     }
-    this.tradeService.trade(body)
+    this.loggerComponent.data("body || ", body)
+    await this.tradeService.trade(body)
     res.json(Resp.Ok(body))
   }
 }

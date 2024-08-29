@@ -3,8 +3,16 @@
     <body>
         <%- include('header', {publicPath: publicPath}); %>
             <div
-                style="width: 85vw;height:80vh;padding:10vh 10vw 0 5vw;display:flex;align-items:flex-start;justify-content:space-between;">
+                style="width: 85vw;height:60vh;padding:10vh 10vw 0 5vw;display:flex;align-items:flex-start;justify-content:space-between;">
+
                 <ul class="stocklist-ul">
+                    <li style="font-weight: 900;">
+                        短线精灵
+                    </li>
+                    <li style="font-weight: 400;font-size:12px">
+                        只在盘前和盘后交易
+                    </li>
+                    <br>
                     <% chooseData.forEach(function(item) { %>
                         <li class="stocklist-li">
                             <span onclick="replaceURL('<%= item.code %>')" style="cursor:pointer">
@@ -12,9 +20,82 @@
                             </span>
                         </li>
                         <% }); %>
+
+                            <section>
+                                <div>
+                                    <span> 股票名称:</span>
+                                    <br>
+                                    <input id="stockName" value="<%- name %>" disabled>
+                                </div>
+                                <div>
+                                    <span> 收盘价:</span>
+                                    <br>
+                                    <input id="closePrice" value="<%- CURRENT.fClose %>" disabled>
+                                </div>
+                                <div>
+                                    <span> 涨跌幅:</span>
+                                    <br>
+                                    <input id="rate" value="<%- CURRENT.rate %>" disabled>
+                                </div>
+                                <div>
+                                    <span> 数量:</span>
+                                    <br>
+                                    <input id="total">
+                                </div>
+                                <div>
+                                    <span> 交易:</span>
+                                    <br>
+                                    <button onclick="trade(1)">Buy</button>
+                                    <button onclick="trade(2)">Sell</button>
+                                </div>
+                            </section>
                 </ul>
-                <div id="chart" style="width: 90%;height:60%;"></div>
+                <div id="chart" style="width: 90%;height:60vh;"></div>
             </div>
+            <div
+                style="width: 85vw;;padding:10vh 10vw 0 5vw;display:flex;align-items:flex-start;justify-content:center;margin-bottom:50px">
+                <div class="plan_box">
+                    <table>
+                        <thead>
+                            <td class="head" style="width: 204px;">ID</td>
+                            <td class="head" style="width: 176px;">USERID</td>
+                            <td class="head" style="width: 190px;">CODE</td>
+                            <td class="head" style="width: 190px;">TYPE</td>
+                            <td class="head" style="width: 190px;">PRICE</td>
+                            <td class="head" style="width: 190px;">TOTAL</td>
+                            <td class="head" style="width: 190px;">CREATETIME</td>
+                        </thead>
+                        <tbody>
+                            <% TRADERECORD.forEach(function(item) { %>
+                                <tr>
+                                    <td>
+                                        <%= item.id %>
+                                    </td>
+                                    <td>
+                                        <%= item.userId %>
+                                    </td>
+                                    <td>
+                                        <%= item.code %>
+                                    </td>
+                                    <td>
+                                        <%= item.type %>
+                                    </td>
+                                    <td>
+                                        <%= item.price %>
+                                    </td>
+                                    <td>
+                                        <%= item.total %>
+                                    </td>
+                                    <td>
+                                        <%= item.createTime %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
 
             <%- include('footer', {publicPath: publicPath}); %>
 
@@ -98,6 +179,34 @@
                     };
 
                     myChart.setOption(option);
+                </script>
+                <script>
+
+                    function trade(type) {
+                        const total = document.getElementById("total").value;
+                        fetch(`<%- publicPath %>stockBaseInfo/get?code=<%- CURRENT.code %>`).then(res => res.json()).then(res => {
+                            const data = res.data;
+                            const userId = 0;
+                            const code = data.code;
+                            const price = data.fClose;
+                            const body = {
+                                total,
+                                type,
+                                userId,
+                                code,
+                                price
+                            }
+                            fetch('<%- publicPath %>tradecontroller/trade', {
+                                method: 'POST',
+                                body: JSON.stringify(body),
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            }).then(res => res.json()).then(res => {
+                                console.log(res);
+                            })
+                        })
+                    }
                 </script>
     </body>
 

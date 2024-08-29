@@ -132,6 +132,22 @@ export function getKlineByCode(stockCode: string) {
   })
 }
 
+export async function getStockBaseInfo(code = "600733") {
+  const kLineData = await getKlineByCode(code as string)
+  kLineData.data = kLineData.data.map((item) => {
+    const dataset = item
+    const dataObject = {}
+    klineKeys.forEach((key, index) => {
+      dataObject[key] = dataset[index]
+    })
+    return dataObject
+  })
+  const current = kLineData.data[kLineData.data.length - 1]
+  current.code = code
+  current.name = kLineData.name
+  return current
+}
+
 export function getConf(key: string) {
   try {
     return _.get(loadSgridConf(), key, "")
@@ -140,3 +156,31 @@ export function getConf(key: string) {
     return ""
   }
 }
+
+export const klineKeys = [
+  "date",
+  "fOpen",
+  "fClose",
+  "fMax",
+  "fMin",
+  "volume",
+  "turnover",
+  "amplitude",
+  "rate",
+  "diff",
+  "turnOverRate"
+]
+
+export const klineChineseKeys = [
+  "日期",
+  "开盘",
+  "收盘",
+  "最高",
+  "最低",
+  "成交量",
+  "成交额",
+  "振幅",
+  "涨跌幅",
+  "涨跌额",
+  "换手率"
+]

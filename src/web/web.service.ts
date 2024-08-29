@@ -167,4 +167,8 @@ export default class WebService {
   async getChooseData() {
     return this.db.getChooseData()
   }
+
+  async getTradeRecord() {
+    return this.db.getTradeList()
+  }
 }

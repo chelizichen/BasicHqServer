@@ -1,5 +1,10 @@
 import knex, { Knex } from "knex"
-import { Autowired, Component, dbRsu2Vo } from "sgridnode/build/main"
+import {
+  Autowired,
+  Component,
+  dbRsu2Vo,
+  dto2tableFields
+} from "sgridnode/build/main"
 import { getConf } from "../util/index.util"
 import LruComponent from "./lru"
 import moment from "moment"
@@ -46,26 +51,6 @@ export class ConnComponent {
       })
   }
 
-  syncDeleteSameData() {
-    const locked = threadLock()
-    if (!locked) {
-      console.log(
-        "syncDeleteSameData 加锁失败 |" + process.env.SGRID_PROCESS_INDEX
-      )
-      return
-    }
-    console.log(
-      "syncDeleteSameData 加锁成功 |" + process.env.SGRID_PROCESS_INDEX
-    )
-    const sql = `
-    DELETE t1 FROM trade_money_total t1
-        INNER JOIN
-    trade_money_total t2 
-WHERE
-    t1.id < t2.id AND t1.date = t2.date AND t1.total = t2.total; `
-    this.conn.raw(sql)
-  }
-
   async getRecentlyTradeTotalList() {
     const tdy = {
       name: Number(moment().format("YYYYMMDD")),
@@ -96,6 +81,26 @@ WHERE
     const tradeList = await this.conn
       .select("*")
       .from("choose_stock")
+      .orderBy("id", "desc")
+    const resp = dbRsu2Vo<ChooseData[]>(tradeList)
+    return resp
+  }
+
+  async saveTradeData(data: T_trade) {
+    this.conn
+      .insert(dto2tableFields(data))
+      .into("trade_stock_record")
+      .then((res) => {
+        this.logger.data("syncSaveTradeTotalTdy success", res)
+      })
+      .catch((err: Error) => {
+        this.logger.error("syncSaveTradeTotalTdy error", err.message)
+      })
+  }
+  async getTradeList() {
+    const tradeList = await this.conn
+      .select("*")
+      .from("trade_stock_record")
       .orderBy("id", "desc")
     const resp = dbRsu2Vo<ChooseData[]>(tradeList)
     return resp
