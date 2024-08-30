@@ -1,14 +1,14 @@
 import { Autowired, Component } from "sgridnode/build/main"
-import ValueComponent from "../component/value"
-import LruComponent from "../component/lru"
+import ValueComponent from "../../component/value"
+import LruComponent from "../../component/lru"
 import {
   getBKHQ,
   getBkMain,
   getTradeTotal,
   getKlineByCode
-} from "../util/index.util"
+} from "../../util/index.util"
 import _ from "lodash"
-import { ConnComponent } from "../component/db"
+import { ConnComponent } from "../../component/db"
 
 @Component()
 export default class WebService {
@@ -157,7 +157,7 @@ export default class WebService {
       title: "历史成交",
       legend: "成交总额(亿)",
       publicPath: this.value.publicPath,
-      data: JSON.stringify(kLineData.data),
+      his_chart_data: JSON.stringify(kLineData.data),
       name: kLineData.name,
       chooseData: []
     }

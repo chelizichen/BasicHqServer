@@ -2,6 +2,8 @@ import { Autowired, Controller, Get, Resp } from "sgridnode/build/main"
 import { SgridNodeBaseController } from "../../decorator"
 import {
   getKlineByCode,
+  getKlineDataToday,
+  getLastPrice,
   getStockBaseInfo,
   klineChineseKeys,
   klineKeys
@@ -9,27 +11,10 @@ import {
 import { NextFunction, Request, Response } from "express"
 import _ from "lodash"
 import loggerComponent from "../../component/logger"
-
-function EmptyFiledInterceptor(filedName: string, errorText: string) {
-  return function (req: Request, res: Response, next: NextFunction) {
-    if (_.get(req, filedName)) {
-      next()
-    } else {
-      res.status(400).send(Resp.Error(-1, errorText, null))
-    }
-  }
-}
-
-function FiledLengthInterceptor(filedName: string, errorText: string) {
-  return function (req: Request, res: Response, next: NextFunction) {
-    const val = _.get(req, filedName)
-    if (val && val.length == 6) {
-      next()
-    } else {
-      res.status(400).send(Resp.Error(-1, errorText, null))
-    }
-  }
-}
+import {
+  EmptyFiledInterceptor,
+  FiledLengthInterceptor
+} from "../../interceptor/empty.validate"
 
 @Controller("/stockBaseInfo")
 class StockBaseController extends SgridNodeBaseController {
@@ -72,6 +57,24 @@ class StockBaseController extends SgridNodeBaseController {
       })
       return dataObject
     })
+    res.json(Resp.Ok(kLineData))
+  }
+
+  @Get(
+    "/getLastPrice",
+    EmptyFiledInterceptor("query.code", "error:股票代码不能为空"),
+    FiledLengthInterceptor("query.code", "error:必须为6位小数")
+  )
+  async getLastPrice(req: Request, res: Response) {
+    const { code } = req.query
+    const kLineData = await getLastPrice(code as string)
+    res.json(Resp.Ok(kLineData))
+  }
+
+  @Get("/getKlineDataToday")
+  async getKlineDataToday(req: Request, res: Response) {
+    const { code } = req.query
+    const kLineData = await getKlineDataToday(code as string)
     res.json(Resp.Ok(kLineData))
   }
 }

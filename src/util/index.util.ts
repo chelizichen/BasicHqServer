@@ -132,7 +132,51 @@ export function getKlineByCode(stockCode: string) {
   })
 }
 
-export async function getStockBaseInfo(code = "600733") {
+/**
+ * @description 最近几次价格
+ * @param stockCode
+ * @returns
+ */
+export function getLastPrice(stockCode: string) {
+  return new Promise((resolve) => {
+    const T = replaceTarget(getConf("config.LAST_PRICE"))
+    const market = getMarket(stockCode)
+    const target = T.URL.replace("[MARKET]", market).replace(
+      "[CODE]",
+      stockCode
+    )
+    axios.get(target).then((res) => {
+      const data = res.data
+      const ret = eval(data.replace(T.NAME, ""))
+      resolve(ret)
+    })
+  })
+}
+
+export function getKlineDataToday(stockCode: string = "600733") {
+  return new Promise((resolve) => {
+    const T = replaceTarget(getConf("config.KLINE_TODAY_HISTORY"))
+    const market = getMarket(stockCode)
+    const target = T.URL.replace("[MARKET]", market).replace(
+      "[CODE]",
+      stockCode
+    )
+    axios.get(target).then((res) => {
+      const data = res.data
+      const ret = eval(data.replace(T.NAME, ""))
+      console.log("ret", ret)
+
+      let klines = _.get(ret, "data.trends", [])
+      klines = klines.map((v) => v.split(","))
+      resolve({
+        data: klines,
+        name: `${ret.data.name}(${ret.data.code})`
+      })
+    })
+  })
+}
+
+export async function getStockBaseInfo(code: string = "600733") {
   const kLineData = await getKlineByCode(code as string)
   kLineData.data = kLineData.data.map((item) => {
     const dataset = item
@@ -145,6 +189,8 @@ export async function getStockBaseInfo(code = "600733") {
   const current = kLineData.data[kLineData.data.length - 1]
   current.code = code
   current.name = kLineData.name
+  const fNowData = await getLastPrice(code)
+  current.fNow = _.last(fNowData.data.details).split(",")[1]
   return current
 }
 

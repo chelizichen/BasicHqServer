@@ -1,14 +1,14 @@
 import { Controller, Get, Autowired, Resp, Post } from "sgridnode/build/main"
 import { NextFunction, Request, Response } from "express"
-import { SgridNodeBaseController } from "../decorator"
-import { createFileMiddleware } from "../middleware/file"
+import { SgridNodeBaseController } from "../../decorator"
+import { createFileMiddleware } from "../../middleware/file"
 import path from "path"
 import fs from "fs"
 import { cwd } from "process"
 import WebService from "./web.service"
-import ValueComponent from "../component/value"
-import loggerComponent from "../component/logger"
-import { getStockBaseInfo } from "../util/index.util"
+import ValueComponent from "../../component/value"
+import loggerComponent from "../../component/logger"
+import { getKlineDataToday, getStockBaseInfo } from "../../util/index.util"
 
 @Controller("/web")
 class WebController extends SgridNodeBaseController {
@@ -39,17 +39,17 @@ class WebController extends SgridNodeBaseController {
 
   @Get("/kline")
   async kline(req: Request, res: Response) {
-    const render_data = await this.service.getKlineByCode(req.query.code!)
-    const choose_data = await this.service.getChooseData()
+    const render_data: any = await this.service.getKlineByCode(req.query.code!) // 历史K
+    const today_chart_data = await getKlineDataToday(req.query.code!) // 今日K
+    render_data.today_chart_data = JSON.stringify(today_chart_data.data)
+    const choose_data = await this.service.getChooseData() // 选中的
     render_data.chooseData = choose_data
-    const current = await getStockBaseInfo(req.query.code)
+    const current = await getStockBaseInfo(req.query.code) // 股票基本信息
     render_data.CURRENT = current
     console.log("CURRENT", render_data.CURRENT)
     render_data.NODE = process.env.SGRID_PROCESS_INDEX || "0"
-
     const tradeRecord = await this.service.getTradeRecord()
     render_data.TRADERECORD = tradeRecord
-    console.log("TRADERECORD", tradeRecord)
     res.render("kline", render_data)
   }
 
