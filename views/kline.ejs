@@ -111,14 +111,6 @@
 
                 <script defer>
                     (function () {
-                        var replaceURL = function (code = 6000000) {
-                            var url = window.location.href;
-                            var u = new URL(url)
-                            u.searchParams.set('code', code)
-                            var target = u.toString()
-                            window.location.href = target
-                        }
-
                         // 初始化图表实例
                         var myChart = echarts.init(document.getElementById("today_chart"));
 
@@ -189,9 +181,91 @@
                         myChart.setOption(option);
                     }())
                 </script>
-                <script>
+                <script defer>
+                        (function () {
+                            // 初始化图表实例
+                            var myChart = echarts.init(document.getElementById("his_chart"));
 
-                    function trade(type) {
+                            var data = JSON.parse('<%- his_chart_data %>')
+
+                            var dates = data.map(function (item) {
+                                return item[0];
+                            });
+
+                            var dataValues = data.map(function (item) {
+                                return [+item[1], +item[2], +item[3], +item[4], +item[5], +item[6], +item[7]];
+                            });
+
+                            var option = {
+                                title: {
+                                    text: '<%- name %>',
+                                    subtext: "历史"
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+                                    axisPointer: {
+                                        type: 'cross'
+                                    },
+                                    formatter: function (params) {
+                                        let param = params[0];
+                                        return `${param.name}<br/>`
+                                            + `开盘: ${param.data[1]}<br/>`
+                                            + `收盘: ${param.data[2]}<br/>`
+                                            + `最高: ${param.data[3]}<br/>`
+                                            + `最低: ${param.data[4]}<br/>`
+                                            + `成交量: ${data.find(d => d[0] === param.name)[5]}<br/>`
+                                            + `成交额: ${data.find(d => d[0] === param.name)[6]}<br/>`
+                                            + `振幅: ${data.find(d => d[0] === param.name)[7]}%<br/>`
+                                            + `涨跌幅: ${data.find(d => d[0] === param.name)[8]}%<br/>`
+                                            + `涨跌额: ${data.find(d => d[0] === param.name)[9]}<br/>`
+                                            + `换手率: ${data.find(d => d[0] === param.name)[10]}%`;
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'category',
+                                    data: dates,
+                                    boundaryGap: false,
+                                    axisLine: {
+                                        show: false // 隐藏 X 轴轴线
+                                    },
+                                    axisTick: {
+                                        show: false // 隐藏 X 轴刻度线
+                                    },
+                                    splitLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: "rgba(77, 128, 254, 0.2)",
+                                            width: 2
+                                        }
+                                    }
+                                },
+                                yAxis: {
+                                    scale: true
+                                },
+                                series: [{
+                                    type: 'candlestick',
+                                    data: dataValues,
+                                    itemStyle: {
+                                        color: '#ec0000',
+                                        color0: '#00da3c',
+                                        borderColor: '#8A0000',
+                                        borderColor0: '#008F28'
+                                    }
+                                }]
+                            };
+
+                            myChart.setOption(option);
+                        }())
+                </script>
+                <script>
+                    var replaceURL = function (code = 6000000) {
+                        var url = window.location.href;
+                        var u = new URL(url)
+                        u.searchParams.set('code', code)
+                        var target = u.toString()
+                        window.location.href = target
+                    }
+                    var trade = function (type) {
                         const total = document.getElementById("total").value;
                         fetch(`<%- publicPath %>stockBaseInfo/get?code=<%- CURRENT.code %>`).then(res => res.json()).then(res => {
                             const data = res.data;
@@ -217,82 +291,7 @@
                         })
                     }
                 </script>
-                <script defer>
-                    (function () {
-                        // 初始化图表实例
-                        var myChart = echarts.init(document.getElementById("his_chart"));
 
-                        var data = JSON.parse('<%- his_chart_data %>')
-
-                        var dates = data.map(function (item) {
-                            return item[0];
-                        });
-
-                        var dataValues = data.map(function (item) {
-                            return [+item[1], +item[2], +item[3], +item[4], +item[5], +item[6], +item[7]];
-                        });
-
-                        var option = {
-                            title: {
-                                text: '<%- name %>',
-                                subtext: "历史"
-                            },
-                            tooltip: {
-                                trigger: 'axis',
-                                axisPointer: {
-                                    type: 'cross'
-                                },
-                                formatter: function (params) {
-                                    let param = params[0];
-                                    return `${param.name}<br/>`
-                                        + `开盘: ${param.data[1]}<br/>`
-                                        + `收盘: ${param.data[2]}<br/>`
-                                        + `最高: ${param.data[3]}<br/>`
-                                        + `最低: ${param.data[4]}<br/>`
-                                        + `成交量: ${data.find(d => d[0] === param.name)[5]}<br/>`
-                                        + `成交额: ${data.find(d => d[0] === param.name)[6]}<br/>`
-                                        + `振幅: ${data.find(d => d[0] === param.name)[7]}%<br/>`
-                                        + `涨跌幅: ${data.find(d => d[0] === param.name)[8]}%<br/>`
-                                        + `涨跌额: ${data.find(d => d[0] === param.name)[9]}<br/>`
-                                        + `换手率: ${data.find(d => d[0] === param.name)[10]}%`;
-                                }
-                            },
-                            xAxis: {
-                                type: 'category',
-                                data: dates,
-                                boundaryGap: false,
-                                axisLine: {
-                                    show: false // 隐藏 X 轴轴线
-                                },
-                                axisTick: {
-                                    show: false // 隐藏 X 轴刻度线
-                                },
-                                splitLine: {
-                                    show: true,
-                                    lineStyle: {
-                                        color: "rgba(77, 128, 254, 0.2)",
-                                        width: 2
-                                    }
-                                }
-                            },
-                            yAxis: {
-                                scale: true
-                            },
-                            series: [{
-                                type: 'candlestick',
-                                data: dataValues,
-                                itemStyle: {
-                                    color: '#ec0000',
-                                    color0: '#00da3c',
-                                    borderColor: '#8A0000',
-                                    borderColor0: '#008F28'
-                                }
-                            }]
-                        };
-
-                        myChart.setOption(option);
-                    }())
-                </script>
     </body>
 
     </html>
