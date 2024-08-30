@@ -102,7 +102,10 @@ export class ConnComponent {
       .select("*")
       .from("trade_stock_record")
       .orderBy("id", "desc")
-    const resp = dbRsu2Vo<ChooseData[]>(tradeList)
+    const resp = dbRsu2Vo<ChooseData[]>(tradeList).map((v) => {
+      v.createTime = moment(v.createTime).format("YYYY-MM-DD HH:mm:ss")
+      return v
+    })
     return resp
   }
 }
