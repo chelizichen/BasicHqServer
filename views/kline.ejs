@@ -120,7 +120,7 @@
                         });
 
                         var dataValues = data.map(function (item) {
-                            return [+item[1], +item[2], +item[3], +item[4], +item[5], +item[6], +item[7]];
+                            return [+item[1], +item[2], +item[3], +item[4]];
                         });
 
                         var option = {
@@ -133,17 +133,6 @@
                                 axisPointer: {
                                     type: 'cross'
                                 },
-                                formatter: function (params) {
-                                    let param = params[0];
-                                    return `${param.name}<br/>`
-                                        + `开盘: ${param.data[1]}<br/>`
-                                        + `收盘: ${param.data[2]}<br/>`
-                                        + `最高: ${param.data[3]}<br/>`
-                                        + `最低: ${param.data[4]}<br/>`
-                                        + `成交量: ${data.find(d => d[0] === param.name)[5]}<br/>`
-                                        + `成交额: ${data.find(d => d[0] === param.name)[6]}<br/>`
-                                        + `振幅: ${data.find(d => d[0] === param.name)[7]}%<br/>`
-                                }
                             },
                             xAxis: {
                                 type: 'category',

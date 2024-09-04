@@ -4,6 +4,7 @@ import {
   getKlineByCode,
   getKlineDataToday,
   getLastPrice,
+  getMarket,
   getStockBaseInfo,
   klineChineseKeys,
   klineKeys
@@ -15,11 +16,16 @@ import {
   EmptyFiledInterceptor,
   FiledLengthInterceptor
 } from "../../interceptor/empty.validate"
+import stockBaseService from "./stockBase.service"
 
 @Controller("/stockBaseInfo")
 class StockBaseController extends SgridNodeBaseController {
   @Autowired(loggerComponent)
   logger: loggerComponent
+
+  @Autowired(stockBaseService)
+  service: stockBaseService
+
   @Get("/klineChineseKeys")
   async getklineChineseKeys(req: Request, res: Response) {
     res.json(Resp.Ok(klineChineseKeys))
@@ -76,6 +82,17 @@ class StockBaseController extends SgridNodeBaseController {
     const { code } = req.query
     const kLineData = await getKlineDataToday(code as string)
     res.json(Resp.Ok(kLineData))
+  }
+
+  @Get("/v2/getStockHq")
+  async getStockHq(req: Request, res: Response) {
+    const { code } = req.query
+    const market = getMarket(code as string) == 1 ? "sh" : "sz"
+    const target = `http://qt.gtimg.cn/q=s_${market}${code}`
+    this.logger.info("target %s", target)
+    this.service.getStockHq(target).then((data) => {
+      res.json(Resp.Ok(data))
+    })
   }
 }
 

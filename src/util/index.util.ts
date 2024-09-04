@@ -1,5 +1,5 @@
 import axios from "axios"
-import _, { camelCase } from "lodash"
+import _ from "lodash"
 import { loadSgridConf } from "sgridnode/build/main"
 
 export function generateRandomCallbackName() {
@@ -8,14 +8,29 @@ export function generateRandomCallbackName() {
   return `jQuery${randomPart}_${timestamp}`
 }
 
-export function replaceTarget(URL) {
+export function replaceTarget(URL, MARKET: number = 0, CODE: string = "") {
   const PARAMS = "[JSONPCALLBACK]"
   const PARAMS2 = "[TIME]"
+  const PARAMS3 = "[MARKET]"
+  const PARAMS4 = "[CODE]"
   const NAME = generateRandomCallbackName()
   const NAME2 = Date.now() // 获取当前时间戳
   return {
-    URL: URL.replace(PARAMS, NAME).replace(PARAMS2, NAME2),
+    URL: URL.replace(PARAMS, NAME)
+      .replace(PARAMS2, NAME2)
+      .replace(PARAMS3, MARKET)
+      .replace(PARAMS4, CODE),
     NAME: NAME
+  }
+}
+
+export function getMarket(stockCode: string): number {
+  if (stockCode.startsWith("11")) {
+    return 1
+  } else if (stockCode.startsWith("12")) {
+    return 0
+  } else {
+    return ["6", "9", "5", "7"].includes(String(stockCode).slice(0, 1)) ? 1 : 0
   }
 }
 
@@ -101,25 +116,11 @@ export function getTradeTotal(TARGET: string) {
   })
 }
 
-function getMarket(stockCode: string): number {
-  if (stockCode.startsWith("11")) {
-    return 1
-  } else if (stockCode.startsWith("12")) {
-    return 0
-  } else {
-    return ["6", "9", "5", "7"].includes(String(stockCode).slice(0, 1)) ? 1 : 0
-  }
-}
-
 export function getKlineByCode(stockCode: string) {
   return new Promise((resolve) => {
-    const T = replaceTarget(getConf("config.KLINE_DATA"))
     const market = getMarket(stockCode)
-    const target = T.URL.replace("[MARKET]", market).replace(
-      "[CODE]",
-      stockCode
-    )
-    axios.get(target).then((res) => {
+    const T = replaceTarget(getConf("config.KLINE_DATA"), market, stockCode)
+    axios.get(T.URL).then((res) => {
       const data = res.data
       const ret = eval(data.replace(T.NAME, ""))
       let klines = _.get(ret, "data.klines", [])
@@ -139,13 +140,9 @@ export function getKlineByCode(stockCode: string) {
  */
 export function getLastPrice(stockCode: string) {
   return new Promise((resolve) => {
-    const T = replaceTarget(getConf("config.LAST_PRICE"))
     const market = getMarket(stockCode)
-    const target = T.URL.replace("[MARKET]", market).replace(
-      "[CODE]",
-      stockCode
-    )
-    axios.get(target).then((res) => {
+    const T = replaceTarget(getConf("config.LAST_PRICE"), market, stockCode)
+    axios.get(T.URL).then((res) => {
       const data = res.data
       const ret = eval(data.replace(T.NAME, ""))
       resolve(ret)
@@ -155,13 +152,13 @@ export function getLastPrice(stockCode: string) {
 
 export function getKlineDataToday(stockCode: string = "600733") {
   return new Promise((resolve) => {
-    const T = replaceTarget(getConf("config.KLINE_TODAY_HISTORY"))
     const market = getMarket(stockCode)
-    const target = T.URL.replace("[MARKET]", market).replace(
-      "[CODE]",
+    const T = replaceTarget(
+      getConf("config.KLINE_TODAY_HISTORY"),
+      market,
       stockCode
     )
-    axios.get(target).then((res) => {
+    axios.get(T.URL).then((res) => {
       const data = res.data
       const ret = eval(data.replace(T.NAME, ""))
       console.log("ret", ret)

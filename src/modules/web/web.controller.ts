@@ -16,6 +16,10 @@ class WebController extends SgridNodeBaseController {
   @Autowired(ValueComponent) value: ValueComponent
   @Autowired(loggerComponent) logger: loggerComponent
 
+  public assignRenderObj(data: any) {
+    return Object.assign({}, data)
+  }
+
   @Get("/bk")
   async bk(req: Request, res: Response) {
     const render_data = await this.service.getBkData()
