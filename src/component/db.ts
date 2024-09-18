@@ -59,6 +59,7 @@ export class ConnComponent {
     const tradeList = await this.conn
       .select("*")
       .from("trade_money_total")
+      .limit(14)
       .orderBy("id", "desc")
 
     console.log("tradeList", tradeList)
